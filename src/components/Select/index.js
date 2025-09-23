@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState } from "react";
 import PropTypes from "prop-types";
-
 import "./style.scss";
 
 const Select = ({
@@ -13,13 +12,31 @@ const Select = ({
   label,
   type = "normal",
 }) => {
+
+
   const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
+
+  // CODE D'ORIGINE
+  // const changeValue = (newValue) => {
+  //   onChange();
+  //   setValue(newValue);
+  //   setCollapsed(newValue);
+  // };
+
   const changeValue = (newValue) => {
-    onChange();
-    setValue(newValue);
-    setCollapsed(newValue);
+    // ✅ CORRECTION 1 : Transmettre la valeur au parent !
+    if(onChange){
+      onChange(newValue);
+
+      // ✅ CORRECTION 2 : Mettre à jour l'état local
+      setValue(newValue);
+
+      // ✅ CORRECTION 3 : Fermer le menu (boolean, pas la valeur !)
+      setCollapsed(true);
+    }
   };
+
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
       {label && <div className="label">{label}</div>}
